@@ -35,7 +35,7 @@ before_script:
   - wget  -O /tmp/openshift-client-linux.tar.gz https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-4.3/openshift-client-linux.tar.gz
   - tar xvzf /tmp/openshift-client-linux.tar.gz -C /tmp
   - rm -f /tmp/openshift-client-linux.tar.gz
-  - print "y\n" | /tmp/oc login $OPENSHIFT_ADDRESS --username=$OPENSHIFT_USER --password=$OPENSHIFT_PASS -n $OPENSHIFT_NAMESPACE --insecure-skip-tls-verify
+  - print "y\n" | /tmp/oc login https://icp-console.apps.gi-bhc-svl.os.fyre.ibm.com --username=my-rhel-icp-admin --password=AHippopotamusPlaysHopscotchWithAnElephant -n staging --insecure-skip-tls-verify
   - cp ~/.kube/config ./tests/config
 
 script:
