@@ -1,0 +1,20 @@
+apiVersion: v1
+clusters:
+- cluster:
+    insecure-skip-tls-verify: true
+    server: https://api.car-dev01.os.fyre.ibm.com:6443
+  name: api-car-dev01-os-fyre-ibm-com:6443
+contexts:
+- context:
+    cluster: api-car-dev01-os-fyre-ibm-com:6443
+    namespace: unit-test
+    user: unit-test/api-car-dev01-os-fyre-ibm-com:6443
+  name: unit-test/api-car-dev01-os-fyre-ibm-com:6443/unit-test
+current-context: unit-test/api-car-dev01-os-fyre-ibm-com:6443/unit-test
+kind: Config
+preferences: {}
+users:
+
+- name: unit-test/api-car-dev01-os-fyre-ibm-com:6443
+  user:
+    token: 
