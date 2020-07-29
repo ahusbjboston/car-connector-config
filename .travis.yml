@@ -1,0 +1,43 @@
+dist: bionic
+sudo: required
+
+language: python
+python:
+  - "3.8.1"
+
+git:
+  depth: false
+
+services:
+  - docker
+
+env:
+    - DOCKER_COMPOSE_VERSION=1.25.5
+
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - chmod +x ./scripts/before_install.sh
+  - ./scripts/before_install.sh
+
+install:
+  - pip3 install --upgrade pip 
+  - pip3 install -r requirements.txt 
+  - pip3 install pytest-cov
+  - pip install pycrypto
+  - pip install ansible
+  - pip install docker-py
+
+before_script:
+  - git submodule update --init --recursive --remote
+  - wget  -O /tmp/openshift-client-linux.tar.gz https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-4.3/openshift-client-linux.tar.gz
+  - tar xvzf /tmp/openshift-client-linux.tar.gz -C /tmp
+  - rm -f /tmp/openshift-client-linux.tar.gz
+  - print "y\n" | /tmp/oc login $OPENSHIFT_ADDRESS --username=$OPENSHIFT_USER --password=$OPENSHIFT_PASS -n $OPENSHIFT_NAMESPACE --insecure-skip-tls-verify
+  - cp ~/.kube/config ./tests/config
+
+script:
+  - chmod +x ./scripts/runAnsible.sh
+  - ./scripts/runAnsible.sh 

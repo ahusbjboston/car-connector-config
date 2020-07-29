@@ -1,0 +1,3 @@
+[submodule "scripts/car-devops"]
+	path = scripts/car-devops
+	url = git@github.ibm.com:CAR/car-devops.git
