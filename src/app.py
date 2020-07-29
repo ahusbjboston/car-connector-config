@@ -26,6 +26,7 @@ context.persister = CronJobPersister()
 
 @app.route('/', methods=['GET'])
 def index():
+    print ("update message")
     return app.send_static_file('index.html')
 
 
