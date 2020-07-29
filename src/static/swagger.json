@@ -1,0 +1,211 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "CP4S - CAR",
+        "version": "1.0.0",
+        "title": "Connector Config API"
+    },
+    "servers": [{
+        "url": "/api/v1"
+    }],
+    "tags": [{
+        "name": "Connector Config request",
+        "description": "Example API for requesting and return cronjobs "
+    }],
+    "paths": {
+        "/connectorConfigs": {
+            "get": {
+                "tags": [
+                    "Connector Config request"
+                ],
+                "summary": "Returns Connector Config Name List",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/connector_config_name_list"
+                                }
+                            }
+                        }
+                    },
+                    "503": {
+                        "description": "Failed to connect to Kubernetes."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Connector Config request"
+                ],
+                "summary": "Create a new CronJob ",
+                "requestBody": {
+                    "description": "Connector Config Request Post Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/connector_config"
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/connector_config"
+                                }
+                            }
+                        }
+                    },
+                    "503": {
+                        "description": "Failed to connect to Kubernetes."
+                    }
+                }
+            }
+        },
+        "/connectorConfigs/{connectorConifgName}": {
+            "parameters": [{
+                "name": "connectorConifgName",
+                "in": "path",
+                "required": true,
+                "description": "Name of the Connector Config that we want to match",
+                "type": "string"
+            }],
+            "get": {
+                "tags": [
+                    "Connector Config request"
+                ],
+                "summary": "Get Connector Config request with given Name",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/connector_config"
+                        }
+                    },
+                    "404": {
+                        "description": "Failed. Connector Config request not found."
+                    },
+                    "503": {
+                        "description": "Failed to connect to Kubernetes."
+                    }
+                }
+            },
+            "post": {
+                "summary": "edit a cronjob request by name",
+                "tags": [
+                    "Connector Config request"
+                ],
+                "requestBody": {
+                    "description": "Book Request Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/connector_config"
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/connector_config"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    },
+                    "503": {
+                        "description": "Failed to connect to Kubernetes."
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete Connector Config Request by ID",
+                "tags": [
+                    "Connector Config request"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "success",
+                        "type": "string"
+                    },
+                    "503": {
+                        "description": "Failed to connect to Kubernetes."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "connector_config": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "format": "string"
+                    },
+                    "image": {
+                        "type": "string",
+                        "format": "string"
+                    },
+                    "frequency": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "env_vars": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "secret_env_vars": {
+                        "type": "object",
+                        "properties": {
+                            "key": {
+                                "type": "string",
+                                "format": "string"
+                            },
+                            "value": {
+                                "type": "string",
+                                "format": "password"
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "name",
+                    "image"
+                ]
+            },
+            "connector_config_name_list": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
