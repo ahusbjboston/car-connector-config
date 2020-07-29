@@ -1,0 +1,62 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "{{id}}"
+  labels:
+    name: "{{name}}"
+    type: carconnector
+spec:
+  schedule: "{{schedule}}"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            name: "{{name}}"
+        spec:
+          restartPolicy: Never
+          imagePullSecrets:
+          - name: ibmcp4s-image-pull-secret
+          initContainers:
+          - name: concat-ca
+            image: registry.access.redhat.com/ubi8/ubi-minimal
+            command: 
+            - sh
+            - -c
+            - 'cat /etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt /etc/config/ca.crt > /etc/cache_ca/ca_roots.crt'
+            volumeMounts:
+              - mountPath: /etc/config
+                name: secrets
+                readOnly: true
+              - mountPath: /etc/cache_ca
+                name: cache-ca
+          containers:
+          - name: "{{name}}"
+            securityContext:
+              privileged: false
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              runAsNonRoot: true
+              capabilities:
+                drop:
+                - ALL
+            image: "{{image}}"
+            imagePullPolicy: IfNotPresent
+            env:
+              - "{{env_vars}}"
+              - name: REQUESTS_CA_BUNDLE
+                value: '/etc/cache_ca/ca_roots.crt'
+            volumeMounts:
+              - mountPath: /etc/config
+                name: secrets
+                readOnly: true
+              - mountPath: /etc/cache_ca
+                name: cache-ca
+          volumes:
+          - name: secrets
+            secret:
+              defaultMode: 420
+              secretName: car
+          - name: cache-ca
+            emptyDir: {}

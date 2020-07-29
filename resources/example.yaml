@@ -1,0 +1,96 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cp4s-car-connector-atp
+  labels:
+    name: atp-connector
+    type: carconnector
+spec:
+  schedule: "*/15 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            name: atp-connector
+        spec:
+          restartPolicy: Never
+          imagePullSecrets:
+          - name: ibmcp4s-image-pull-secret
+          initContainers:
+          - name: concat-ca
+            image: registry.access.redhat.com/ubi8/ubi-minimal
+            command: 
+            - sh
+            - -c
+            - 'cat /etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt /etc/config/ca.crt > /etc/cache_ca/ca_roots.crt'
+            volumeMounts:
+              - mountPath: /etc/config
+                name: secrets
+                readOnly: true
+              - mountPath: /etc/cache_ca
+                name: cache-ca
+          containers:
+          - name: atp-connector
+            securityContext:
+              privileged: false
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              runAsNonRoot: true
+              capabilities:
+                drop:
+                - ALL
+            image: quay.io/ibmcp4s/isc-car-connector-atp:1.2.0.0-amd64
+            imagePullPolicy: IfNotPresent
+            env:
+              - name: SUBSCRIPTION_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: ibm-car-atp-secret
+                    key: SUBSCRIPTION_ID
+              - name: TENANT_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: ibm-car-atp-secret
+                    key: TENANT_ID
+              - name: CLIENT_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: ibm-car-atp-secret
+                    key: CLIENT_ID
+              - name: CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: ibm-car-atp-secret
+                    key: CLIENT_SECRET
+              - name: CAR_SERVICE_URL
+                value: '<CLUSTER_URL>/api/car/v2'
+              - name: API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: ibm-car-atp-secret
+                    key: API_KEY
+              - name: PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: ibm-car-atp-secret
+                    key: PASSWORD
+              - name: SOURCE
+                value: 'Microsoft-ATP'
+              - name: REQUESTS_CA_BUNDLE
+                value: '/etc/cache_ca/ca_roots.crt'
+            volumeMounts:
+              - mountPath: /etc/config
+                name: secrets
+                readOnly: true
+              - mountPath: /etc/cache_ca
+                name: cache-ca
+          volumes:
+          - name: secrets
+            secret:
+              defaultMode: 420
+              secretName: car
+          - name: cache-ca
+            emptyDir: {}
+            
