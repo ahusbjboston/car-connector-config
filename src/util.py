@@ -91,6 +91,10 @@ def get_resource(fname):
 
 
 def running_in_cluster():
+    
+    print (os.environ.get('KUBERNETES_SERVICE_HOST'))
+    print (os.environ['KUBERNETES_SERVICE_HOST'])
+    print (os.environ)
     return os.environ.get('KUBERNETES_SERVICE_HOST') and True or False
 
 
