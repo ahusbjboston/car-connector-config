@@ -27,7 +27,7 @@ def get(cronJobName):
 
 
 @api.route('/connectorConfigs', methods=['POST'])
-@error_handler
+#@error_handler
 #@requires_auth(required_access_level=entitlement.readWriteAccess)
 def create():
     print (request.get_json())
