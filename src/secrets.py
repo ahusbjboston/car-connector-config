@@ -21,6 +21,8 @@ def create_car_microservice_access_secret():
     core_v1 = client.CoreV1Api(client.api_client.ApiClient())
     
     name = car_microservice_secret_name()
+    print ("update1")
+    print (name)
 
     data = ignore_404(lambda: core_v1.read_namespaced_secret(name, current_namespace()).data)
     if data:
