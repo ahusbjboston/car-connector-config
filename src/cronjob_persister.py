@@ -20,6 +20,7 @@ class CronJobPersister(Persister):
 
 
     def upsert(self, car_config):
+        print ("comme to upsert method")
         ignore_404(lambda: self.delete(car_config.name))
 
         create_car_microservice_access_secret()
