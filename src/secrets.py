@@ -21,16 +21,18 @@ def create_car_microservice_access_secret():
     core_v1 = client.CoreV1Api(client.api_client.ApiClient())
     
     name = car_microservice_secret_name()
-    print ("update1")
+    print ("update for create_car_microservice_access_secret")
     print (name)
 
     data = ignore_404(lambda: core_v1.read_namespaced_secret(name, current_namespace()).data)
     if data:
         key, passwd = decode(data['key']), decode(data['passwd'])
         if validate_car_service_access(key, passwd):
+            print ("pass for validate")
             context().logger.info('API Key for CAR service access is validated.')
             return
         else:
+            print ("failed for validate")
             context().logger.info('API Key for CAR service access is not valid.')
 
 
