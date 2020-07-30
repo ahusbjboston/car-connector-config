@@ -28,7 +28,7 @@ def get(cronJobName):
 
 @api.route('/connectorConfigs', methods=['POST'])
 @error_handler
-@requires_auth(required_access_level=entitlement.readWriteAccess)
+#@requires_auth(required_access_level=entitlement.readWriteAccess)
 def create():
     cronjob = context().persister.upsert(ConnectorConfig(request.get_json()))
     return Response(jsonpickle.encode(cronjob, unpicklable=False), status=201, mimetype='application/json')
