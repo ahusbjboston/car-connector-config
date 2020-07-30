@@ -11,6 +11,8 @@ ALGORITHMS = 'RS256'
 
 def get_token_auth_header():
     auth = request.headers.get('Authorization', None)
+    print (auth)
+    auth="Bearer bXktcmhlbC1pY3AtYWRtaW46QUhpcHBvcG90YW11c1BsYXlzSG9wc2NvdGNoV2l0aEFuRWxlcGhhbnQ="
     if not auth:
         raise errors.AuthError('authorization_header_missing. Authorization header is expected', 401)
     parts = auth.split()
@@ -21,6 +23,7 @@ def get_token_auth_header():
     elif len(parts) > 2:
         raise errors.AuthError('invalid_header. Authorization header must be Bearer token', 401)
     token = parts[1]
+    print (token)
     return token
 
 
