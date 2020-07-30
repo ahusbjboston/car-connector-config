@@ -113,8 +113,11 @@ def secret_id(name):
 def get_public_key():
     if running_in_cluster():
         key_file = DEFAULT_JWT_PUBLIC_KEY
+        print ("are we coming here for cluster?")
+        print (key_file)
     else:
         key_file = os.environ.get(DEBUG_PUBLIC_KEY, DEFAULT_JWT_PUBLIC_KEY)
+        print ("are we coming here for local environment?")
     with open(key_file, 'rb') as file:
         return jwk_from_pem(file.read())
 
