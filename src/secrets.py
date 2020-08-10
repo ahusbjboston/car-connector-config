@@ -55,3 +55,12 @@ def create_secret(name, data):
     metadata = {'name': name, 'namespace': current_namespace()}
     body = client.V1Secret(api_version='v1', data=encoded_data, kind='Secret', metadata=metadata, type='Opaque')
     handle_409(lambda: core_v1.create_namespaced_secret(current_namespace(), body))
+
+
+def  read_secret():
+    core_v1 = client.CoreV1Api(client.api_client.ApiClient())
+    secret = core_v1.read_namespaced_secret("insights-tenant-user-secret", "staging")
+    print(secret)
+    return secret
+
+
