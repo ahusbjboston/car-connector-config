@@ -24,15 +24,15 @@ class CronJobPersister(Persister):
         print (car_config.name)
         # ignore_404(lambda: self.delete(car_config.name))
 
-        create_car_microservice_access_secret()
+        # create_car_microservice_access_secret()
         print ("back to upsert....")
         print (car_config.name)
         print (car_config.secret_env_vars)
         create_secret(secret_id(car_config.name), car_config.secret_env_vars)
 
-        
-
         yaml_doc = Template().fill(car_config)
+        print ("upsert namespace")
+        print (current_namespace())
         handle_409(lambda: create_from_yaml_single_item(self.k8s_client, yaml_doc, verbose=True, namespace=current_namespace()))
 
 
