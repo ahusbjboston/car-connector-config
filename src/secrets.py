@@ -54,8 +54,11 @@ def create_secret(name, data):
     encoded_data = {}
     for k, v in data.items():
         encoded_data[k] = encode(v)
+    print ("show me encoded data")   
+    print (encoded_data) 
     metadata = {'name': name, 'namespace': current_namespace()}
     print ("come here for create_secret ")
+    # {'name': 'TNT_HMIYKXUFCW56WCEH2H9D38-cp4s-car-tan1-secrets', 'namespace': 'staging'}
     print (metadata)
     body = client.V1Secret(api_version='v1', data=encoded_data, kind='Secret', metadata=metadata, type='Opaque')
     handle_409(lambda: core_v1.create_namespaced_secret(current_namespace(), body))
