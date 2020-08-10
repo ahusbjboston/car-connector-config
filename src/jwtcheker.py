@@ -55,7 +55,7 @@ def requires_auth(required_access_level):
                         # raise jwt.exceptions.ExpiredSignatureError('Signature has expired. Unable to parse authentication token.', 401)
                         raise errors.AuthError('invalid_header. unsupported the public key format ', 401)
 
-                    # util.set_account_id(payload['isc_account'])
+                    util.set_account_id(payload['details']['tenantID'])
                     exp = payload['exp']
                     # iat = payload['iat']
                     if (exp < int(datetime.datetime.now().strftime('%s'))):
