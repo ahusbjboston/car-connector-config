@@ -47,9 +47,9 @@ def requires_auth(required_access_level):
                         #     rsa_key,
                         #     ALGORITHMS
                         # )
-                        payload = jwt.decode(token, secretKey,algorithms='HS256')
+                        # payload = jwt.decode(token, secretKey,algorithms='HS256')
 
-                        # payload = jwt.decode(token, base64.b64decode(secretKey),algorithms='HS256')
+                        payload = jwt.decode(token, base64.b64decode(secretKey),algorithms='HS256')
                        
                     except Exception as e:
                         context().logger.exception(e)
