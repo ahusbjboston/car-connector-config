@@ -64,22 +64,22 @@ def requires_auth(required_access_level):
 
 
 
-def get_token_auth_header_old():
-    auth = request.headers.get('Authorization', None)
-    print (auth)
-    auth="Bearer bXktcmhlbC1pY3AtYWRtaW46QUhpcHBvcG90YW11c1BsYXlzSG9wc2NvdGNoV2l0aEFuRWxlcGhhbnQ="
-    if not auth:
-        raise errors.AuthError('authorization_header_missing. Authorization header is expected', 401)
-    parts = auth.split()
-    if parts[0].lower() != 'bearer':
-        raise errors.AuthError('invalid_header. Authorization header must start with Bearer', 401)
-    elif len(parts) == 1:
-        raise  errors.AuthError('invalid_header. Token not found', 401)
-    elif len(parts) > 2:
-        raise errors.AuthError('invalid_header. Authorization header must be Bearer token', 401)
-    token = parts[1]
-    print (token)
-    return token
+# def get_token_auth_header_old():
+#     auth = request.headers.get('Authorization', None)
+#     print (auth)
+#     auth="Bearer bXktcmhlbC1pY3AtYWRtaW46QUhpcHBvcG90YW11c1BsYXlzSG9wc2NvdGNoV2l0aEFuRWxlcGhhbnQ="
+#     if not auth:
+#         raise errors.AuthError('authorization_header_missing. Authorization header is expected', 401)
+#     parts = auth.split()
+#     if parts[0].lower() != 'bearer':
+#         raise errors.AuthError('invalid_header. Authorization header must start with Bearer', 401)
+#     elif len(parts) == 1:
+#         raise  errors.AuthError('invalid_header. Token not found', 401)
+#     elif len(parts) > 2:
+#         raise errors.AuthError('invalid_header. Authorization header must be Bearer token', 401)
+#     token = parts[1]
+#     print (token)
+#     return token
 
 
 # def requires_auth_old(required_access_level):
