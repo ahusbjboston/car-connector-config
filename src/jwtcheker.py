@@ -1,5 +1,5 @@
 import jsonpickle, json, datetime, traceback
-from jwt import JWT, exceptions
+# from jwt import JWT, exceptions
 from flask import request
 from functools import wraps
 import entitlement, util, errors
@@ -64,8 +64,6 @@ def requires_auth(required_access_level):
 
 
 
-
-
 def get_token_auth_header_old():
     auth = request.headers.get('Authorization', None)
     print (auth)
@@ -84,49 +82,49 @@ def get_token_auth_header_old():
     return token
 
 
-def requires_auth_old(required_access_level):
-    def decorator_requires_auth(f):
-        @wraps(f)
-        def decorated_requires_auth(*args, **kwargs):
-            try:
-                if util.debug_mode():
-                    util.set_account_id()
-                    return f(*args, **kwargs)
-                else:
-                    token = get_token_auth_header()
-                    try:
-                        rsa_key = util.get_public_key()
-                    except exceptions.UnsupportedKeyTypeError as e:
-                        context().logger.exception(e)
-                        context().logger.error(traceback.format_exc())
-                        raise errors.AuthError('invalid_header. unsupported the public key format ', 401)
+# def requires_auth_old(required_access_level):
+#     def decorator_requires_auth(f):
+#         @wraps(f)
+#         def decorated_requires_auth(*args, **kwargs):
+#             try:
+#                 if util.debug_mode():
+#                     util.set_account_id()
+#                     return f(*args, **kwargs)
+#                 else:
+#                     token = get_token_auth_header()
+#                     try:
+#                         rsa_key = util.get_public_key()
+#                     except exceptions.UnsupportedKeyTypeError as e:
+#                         context().logger.exception(e)
+#                         context().logger.error(traceback.format_exc())
+#                         raise errors.AuthError('invalid_header. unsupported the public key format ', 401)
 
-                    if not rsa_key:
-                        raise errors.AuthError('RSA key is not found.', 401)
+#                     if not rsa_key:
+#                         raise errors.AuthError('RSA key is not found.', 401)
 
-                    try:
-                        payload = JWT().decode(
-                            token,
-                            rsa_key,
-                            ALGORITHMS
-                        )
-                    except Exception as e:
-                        context().logger.exception(e)
-                        context().logger.error(traceback.format_exc())
-                        raise errors.AuthError('invalid_header. Unable to parse authentication token.', 401)
+#                     try:
+#                         payload = JWT().decode(
+#                             token,
+#                             rsa_key,
+#                             ALGORITHMS
+#                         )
+#                     except Exception as e:
+#                         context().logger.exception(e)
+#                         context().logger.error(traceback.format_exc())
+#                         raise errors.AuthError('invalid_header. Unable to parse authentication token.', 401)
 
-                    util.set_account_id(payload['isc_account'])
+#                     util.set_account_id(payload['isc_account'])
 
-                    exp = payload['exp']
-                    iat = payload['iat']
-                    if (iat > int(datetime.datetime.now().strftime('%s')) or exp < int(datetime.datetime.now().strftime('%s'))):
-                        raise errors.AuthError('token_expired. token is expired', 401)
+#                     exp = payload['exp']
+#                     iat = payload['iat']
+#                     if (iat > int(datetime.datetime.now().strftime('%s')) or exp < int(datetime.datetime.now().strftime('%s'))):
+#                         raise errors.AuthError('token_expired. token is expired', 401)
 
-                    entitlement.entitlementCheck(token, payload, required_access_level)
+#                     entitlement.entitlementCheck(token, payload, required_access_level)
 
-                    return f(*args, **kwargs)
-            finally:
-                context().account_id = None
+#                     return f(*args, **kwargs)
+#             finally:
+#                 context().account_id = None
 
-        return decorated_requires_auth
-    return decorator_requires_auth
+#         return decorated_requires_auth
+#     return decorator_requires_auth
