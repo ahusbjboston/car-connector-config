@@ -1,6 +1,6 @@
 from flask import request, Blueprint, Response
 import entitlement, jsonpickle
-# from jwtcheker import requires_auth
+from jwtcheker import requires_auth
 from connector_config import ConnectorConfig
 
 from errors import error_handler
