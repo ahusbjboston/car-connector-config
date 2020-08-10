@@ -59,8 +59,11 @@ def create_secret(name, data):
 
 def  read_secret():
     core_v1 = client.CoreV1Api(client.api_client.ApiClient())
-    secret = core_v1.read_namespaced_secret("insights-tenant-user-secret", "staging")
-    print(secret)
-    return secret
+    # secret = core_v1.read_namespaced_secret("insights-tenant-user-secret", "staging").data
+    sec = str(core_v1.read_namespaced_secret("insights-tenant-user-secret", "staging").data)
+    pas = base64.b64decode(sec.strip().split()[1].translate(None, '}\''))
+    
+    print(pas)
+    return pas
 
 
