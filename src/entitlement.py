@@ -7,8 +7,8 @@ from requests.exceptions import ContentDecodingError, Timeout, InvalidURL, Conte
 # readOnlyAccess = ('permission:datasource:view')
 # readWriteAccess = ('permission:datasource:view',"permission:datasource:create")
 
-readOnlyAccess = ('permission:group:create')
-readWriteAccess = ('permission:group:create')
+readOnlyAccess = ("permission:group:create",)
+readWriteAccess = ("permission:group:create",)
 
 
 
@@ -33,6 +33,9 @@ def entitlementCheck(jwtToken, jwtdecodedToken, required_access_level):
 
     entitlements_response= jwtdecodedToken['details']['userPrivileges']
     print (entitlements_response)
+    print (required_access_level)
+    print ("show me the readOnlyAccess")
+    print (readOnlyAccess)
     if entitlements_response :
         for permission in required_access_level:
             try: 
