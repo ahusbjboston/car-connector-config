@@ -3,7 +3,9 @@ import jsonpickle, json, datetime, traceback
 from flask import request
 from functools import wraps
 import entitlement, util, errors
-from util import debug_mode, get_public_key, set_account_id
+# from util import debug_mode, get_public_key, set_account_id
+from util import debug_mode, set_account_id
+
 from context import context
 import jwt 
 import base64
