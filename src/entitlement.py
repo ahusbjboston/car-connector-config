@@ -1,16 +1,50 @@
 import requests, json, os, errors
 from requests.exceptions import ContentDecodingError, Timeout, InvalidURL, ContentDecodingError
 
-readOnlyAccess = ('canUseDataConnections',)
-readWriteAccess = ('canUseDataConnections', 'canCreateDataConnections')
+# readOnlyAccess = ('canUseDataConnections')
+# readWriteAccess = ('canUseDataConnections', 'canCreateDataConnections')
+
+# readOnlyAccess = ('permission:datasource:view')
+# readWriteAccess = ('permission:datasource:view',"permission:datasource:create")
+
+readOnlyAccess = ('permission:group:create')
+readWriteAccess = ('permission:group:create')
+
+
 
 def entitlementCheck(jwtToken, jwtdecodedToken, required_access_level):
-    body = {
-        'userId': jwtdecodedToken['sub'],
-        'accountId': jwtdecodedToken['isc_account'],
-        'applicationId': 'UDS'
-    }
+    # body = {
+    #     'userId': jwtdecodedToken['sub'],
+    #     'accountId': jwtdecodedToken['isc_account'],
+    #     'applicationId': 'UDS'
+    # }
 
+    # “exp” (Expiration Time) Claim
+    # “nbf” (Not Before Time) Claim
+    # “iss” (Issuer) Claim
+    # “aud” (Audience) Claim
+    # “iat” (Issued At) Claim
+
+    # body = {
+    #     'userId': jwtdecodedToken['details']['uid'],
+    #     'tenantID': jwtdecodedToken['details']['tenantID'],
+    #     'applicationId': 'tenantuser'
+    # }
+
+    entitlements_response= jwtdecodedToken['details']['userPrivileges']
+    if entitlements_response :
+            for permission in required_access_level:
+                try: 
+                    entitlements_response.index(permission)
+                except ValueError: raise errors.AuthError(f'Authorization faild: Blocking unauthorized access due to missing role {permission}', 401)
+                else:
+                    raise errors.AuthError('Failed to get entitlements. Cannot get the entitlements.', 401)
+            
+    except (ContentDecodingError, Timeout, InvalidURL, ContentDecodingError) as e:
+        raise errors.AuthError(f'Failed to get entitlements.', 401)
+
+
+    # """
     try:
         response = requests.post(
             os.environ.get('ENTITLEMENTS_API') + '/application',
@@ -33,3 +67,4 @@ def entitlementCheck(jwtToken, jwtdecodedToken, required_access_level):
             
     except (ContentDecodingError, Timeout, InvalidURL, ContentDecodingError) as e:
         raise errors.AuthError(f'Failed to get entitlements.', 401)
+    """

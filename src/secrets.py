@@ -60,10 +60,11 @@ def create_secret(name, data):
 def  read_secret():
     core_v1 = client.CoreV1Api(client.api_client.ApiClient())
     # secret = core_v1.read_namespaced_secret("insights-tenant-user-secret", "staging").data
-    sec = core_v1.read_namespaced_secret("insights-tenant-user-secret", "staging").data
+    print ("show me current namespace")
+    print (current_namespace())
+    sec = core_v1.read_namespaced_secret("insights-tenant-user-secret", current_namespace()).data
     print (sec)
     #https://kubernetes.io/docs/tasks/inject-data-application/distribute-credentials-secure/#create-a-pod-that-has-access-to-the-secret-data-through-environment-variables
-    # pas = base64.b64decode(sec.strip().split()[1].translate(None, '}\''))
     pas=sec["_TENANT_USER_SECRET"]
     # print(pas)
     return pas
