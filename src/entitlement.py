@@ -32,9 +32,11 @@ def entitlementCheck(jwtToken, jwtdecodedToken, required_access_level):
     # }
 
     entitlements_response= jwtdecodedToken['details']['userPrivileges']
+    print (entitlements_response)
     if entitlements_response :
         for permission in required_access_level:
             try: 
+                print (permission)
                 entitlements_response.index(permission)
             except ValueError: raise errors.AuthError(f'Authorization faild: Blocking unauthorized access due to missing role {permission}', 401)
     else:

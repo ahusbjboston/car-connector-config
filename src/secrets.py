@@ -25,6 +25,8 @@ def create_car_microservice_access_secret():
     print (name)
 
     data = ignore_404(lambda: core_v1.read_namespaced_secret(name, current_namespace()).data)
+    print ("show me data for car microservice secret")
+    print (data)
     if data:
         key, passwd = decode(data['key']), decode(data['passwd'])
         if validate_car_service_access(key, passwd):
