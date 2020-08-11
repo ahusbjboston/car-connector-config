@@ -1,9 +1,7 @@
 import os, sys, unittest, jsonpickle
 from flask import Flask
-
 import entitlement
 entitlement.entitlementCheck = lambda token, payload, required_access_level: None
-
 import util
 import api_v1
 from test_persister import TestPersister
