@@ -25,9 +25,10 @@ class CronJobPersister(Persister):
         # ignore_404(lambda: self.delete(car_config.name))
 
         # create_car_microservice_access_secret()
-        print ("back to upsert....")
+        print ("back to upsert for create_secret fromm upsert....")
         print (car_config.name)
         print (car_config.secret_env_vars)
+        
         create_secret(secret_id(car_config.name), car_config.secret_env_vars)
 
         yaml_doc = Template().fill(car_config)

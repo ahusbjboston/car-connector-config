@@ -21,11 +21,12 @@ def create_car_microservice_access_secret():
     core_v1 = client.CoreV1Api(client.api_client.ApiClient())
     
     name = car_microservice_secret_name()
-    print ("update for create_car_microservice_access_secret")
+    ## return context account_id here 
+    print ("name for create_car_microservice_access_secret")
     print (name)
 
     data = ignore_404(lambda: core_v1.read_namespaced_secret(name, current_namespace()).data)
-    print ("show me data for car microservice secret")
+    print ("show me current name space secret data for car microservice secret")
     print (data)
     if data:
         key, passwd = decode(data['key']), decode(data['passwd'])
@@ -40,6 +41,8 @@ def create_car_microservice_access_secret():
 
     key, passwd = generate_api_key()
     data = {CAR_SERVICE_API_KEY: key, CAR_SERVICE_API_PASSWORD: passwd}
+    print ("show me data for secret:")
+    print (data)
     create_secret(name, data)
 
 
@@ -56,6 +59,7 @@ def create_secret(name, data):
         encoded_data[k] = encode(v)
     print ("show me encoded data")   
     print (encoded_data) 
+    
     metadata = {'name': name, 'namespace': current_namespace()}
     print ("come here for create_secret ")
     # {'name': 'TNT_HMIYKXUFCW56WCEH2H9D38-cp4s-car-tan1-secrets', 'namespace': 'staging'}
