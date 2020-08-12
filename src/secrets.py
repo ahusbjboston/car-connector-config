@@ -39,7 +39,7 @@ def create_car_microservice_access_secret():
             context().logger.info('API Key for CAR service access is not valid.')
 
 
-    key, passwd = generate_api_key()
+    # key, passwd = generate_api_key()
     data = {CAR_SERVICE_API_KEY: key, CAR_SERVICE_API_PASSWORD: passwd}
     print ("show me data for secret:")
     print (data)
