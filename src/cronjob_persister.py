@@ -24,7 +24,7 @@ class CronJobPersister(Persister):
         print (car_config.name)
         # ignore_404(lambda: self.delete(car_config.name))
 
-        # create_car_microservice_access_secret()
+        create_car_microservice_access_secret()
         print ("back to upsert for create_secret fromm upsert....")
         print (car_config.name)
         print (car_config.secret_env_vars)
@@ -39,8 +39,13 @@ class CronJobPersister(Persister):
 
     def get(self, name):
         batch_v1beta1 = client.BatchV1beta1Api()
+        print ("here comes to  get  cronjob")
+        print (cron_job_id(name))
         cron_job = batch_v1beta1.read_namespaced_cron_job(cron_job_id(name), current_namespace())
+        print ("show me the cronjob")
+        print (cron_job)
         secret = ignore_404(lambda: client.CoreV1Api().read_namespaced_secret(secret_id(name), current_namespace()))
+        
         return ConnectorConfig(cron_job = cron_job, secret_env_vars = secret)
 
 
