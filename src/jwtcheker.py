@@ -17,7 +17,9 @@ ALGORITHMS = 'RS256'
 
 
 def get_token_auth_header():
-   
+
+    print ("show me the request")
+    print (request)
     auth = request.headers.get('authorization', None)
     if not auth:
         auth = request.headers.get('Authorization', None)
