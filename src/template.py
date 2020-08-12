@@ -10,6 +10,7 @@ class Template(object):
         template = self._load_template()
         self._handle_value(template, None, None)
         for action in self.post_processing:
+            print (action)
             action()
         return template
     
@@ -35,12 +36,19 @@ class Template(object):
 
     def _generate_env_vars(self, container):
         for k, v in self.car_config.all_env_vars().items():
+            print (k)
+            print (v)
             container.append({'name': k, 'value': v})
         for k, v in self.car_config.secret_refs().items():
+            print (k)
+            print (v)
             container.append({'name': k, 'valueFrom': {'secretKeyRef': {'name': v.name, 'key': v.key}}})
 
 
     def _handle_value(self, value, parent, index):
+        print (value)
+        print (parent)
+        print (index)
         if type(value) == dict:
             for key in value:
                 self._handle_value(value[key], value, key)
@@ -59,6 +67,7 @@ class Template(object):
                 elif var == 'schedule': parent[index] = value.replace(m.group(0), CronJobSchedule(self.car_config).frequency_to_schedule())
                 elif var == 'env_vars':
                     self.post_processing.append(lambda: parent.pop(index))
+                    print (parent)
                     self._generate_env_vars(parent)
                 else:
                     raise ValueError('Unknown varialble in the template: ' + m.group(0))

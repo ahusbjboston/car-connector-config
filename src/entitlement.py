@@ -4,7 +4,7 @@ from requests.exceptions import ContentDecodingError, Timeout, InvalidURL, Conte
 # readOnlyAccess = ('canUseDataConnections')
 # readWriteAccess = ('canUseDataConnections', 'canCreateDataConnections')
 
-readOnlyAccess = ('permission:datasource:view')
+readOnlyAccess = ('permission:datasource:view',)
 readWriteAccess = ('permission:datasource:view',"permission:datasource:create")
 
 # readOnlyAccess = ("permission:group:create",)

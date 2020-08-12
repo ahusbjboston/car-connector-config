@@ -59,11 +59,12 @@ class ConnectorConfig(object):
         for k in self.secret_env_vars:
             res[k] = SecretKeyRef(secret_id(self.name), k)
 
-        res[CAR_SERVICE_API_KEY_ENV_VAR] = SecretKeyRef(car_microservice_secret_name(), CAR_SERVICE_API_KEY)
-        res[CAR_SERVICE_API_PASSWORD_ENV_VAR] = SecretKeyRef(car_microservice_secret_name(), CAR_SERVICE_API_PASSWORD)
+        # res[CAR_SERVICE_API_KEY_ENV_VAR] = SecretKeyRef(car_microservice_secret_name(), CAR_SERVICE_API_KEY)
+        # res[CAR_SERVICE_API_PASSWORD_ENV_VAR] = SecretKeyRef(car_microservice_secret_name(), CAR_SERVICE_API_PASSWORD)
         return res
 
     def all_env_vars(self):
         res = self.env_vars.copy()
-        res[CAR_SERVICE_URL] = car_service_url()
+        print (res)
+        # res[CAR_SERVICE_URL] = car_service_url()
         return res
