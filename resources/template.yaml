@@ -6,7 +6,7 @@ metadata:
     name: "{{name}}"
     type: carconnector
 spec:
-  schedule: "*/1 * * * *"
+  schedule: "{{schedule}}"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
