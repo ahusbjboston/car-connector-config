@@ -30,6 +30,7 @@ def get(cronJobName):
 @error_handler
 @requires_auth(required_access_level=entitlement.readWriteAccess)
 def create():
+    print ("come to create")
     print (request.get_json())
     cronjob = context().persister.upsert(ConnectorConfig(request.get_json()))
     return Response(jsonpickle.encode(cronjob, unpicklable=False), status=201, mimetype='application/json')
