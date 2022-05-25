@@ -4,7 +4,7 @@ mock>=4.0.1
 Flask>=1.1.1
 flask_swagger_ui>=3.25.0
 jwt>=0.6.1
-PyJWT==1.7.1
+PyJWT==2.4.0
 requests>=2.23.0
 uwsgi>=2.0.18
 
